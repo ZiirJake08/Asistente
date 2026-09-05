@@ -39,27 +39,34 @@ GOOGLE_CLIENT_CONFIG = {
 }
 GOOGLE_SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 
+# Guarda temporalmente el "code_verifier" de cada intento de login,
+# usando el "state" como llave. Necesario porque Google ahora exige PKCE.
+flujos_pendientes: dict = {}
+
 
 def crear_flow_google():
     return Flow.from_client_config(
         GOOGLE_CLIENT_CONFIG,
         scopes=GOOGLE_SCOPES,
         redirect_uri=os.environ["GOOGLE_REDIRECT_URI"],
+        autogenerate_code_verifier=True,
     )
 
 
 @app.get("/auth/google/login")
 def google_login():
     flow = crear_flow_google()
-    url_autorizacion, _ = flow.authorization_url(
+    url_autorizacion, state = flow.authorization_url(
         access_type="offline", prompt="consent"
     )
+    flujos_pendientes[state] = flow.code_verifier
     return RedirectResponse(url_autorizacion)
 
 
 @app.get("/auth/google/callback")
-def google_callback(code: str):
+def google_callback(code: str, state: str):
     flow = crear_flow_google()
+    flow.code_verifier = flujos_pendientes.pop(state, None)
     flow.fetch_token(code=code)
     creds = flow.credentials
     credenciales_google["personal"] = {
