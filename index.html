@@ -160,8 +160,8 @@
 </div>
 
 <script>
-  // Cambia esto cuando subas el backend a internet.
-  const BACKEND_URL = "http://localhost:8000";
+  // Backend desplegado en Render.
+  const BACKEND_URL = "https://asistente-7tva.onrender.com";
 
   const chatEl = document.getElementById("chat");
   const calEl = document.getElementById("calendario");
@@ -212,14 +212,14 @@
       const data = await resp.json();
       agregarMensaje(data.respuesta, "ziir");
     } catch (err) {
-      agregarMensaje("No pude conectarme con el backend. Revisa que esté corriendo.", "Ziir");
+      agregarMensaje("No pude conectarme con el backend. Revisa que esté corriendo.", "ziir");
     } finally {
       boton.disabled = false;
       input.focus();
     }
   });
 
-  agregarMensaje("Hola, soy Ziir. ¿En qué te ayudo?", "Ziir");
+  agregarMensaje("Hola, soy Ziir. ¿En qué te ayudo?", "ziir");
 </script>
 </body>
 </html>
