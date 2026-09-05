@@ -26,11 +26,37 @@ curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "
 El frontend (la página) le hace peticiones POST a `http://localhost:8000/chat` mientras
 pruebas en tu PC. Cuando lo subas a internet, cambias esa URL por la del servidor real.
 
-## 3. Subirlo a internet (para que funcione desde el iPhone)
+## 4. Subirlo a internet con Render (gratis)
 
-Cuando quieras que tu iPhone también le hable a este backend, lo subimos a un
-servicio como Railway o Render (tienen plan gratis). Avísame cuando lleguemos
-a este paso y lo hacemos juntos.
+**Paso 1 — Sube el código a GitHub**
+1. Crea una cuenta en https://github.com si no tienes
+2. Crea un repositorio nuevo (puede ser privado)
+3. Sube ahí la carpeta completa del backend (`main.py`, `requirements.txt`)
+
+**Paso 2 — Crea el servicio en Render**
+1. Crea una cuenta en https://render.com (gratis, con tu cuenta de GitHub es lo más rápido)
+2. Clic en "New +" → "Web Service"
+3. Conecta tu repositorio de GitHub
+4. Configura así:
+   - **Build command**: `pip install -r requirements.txt`
+   - **Start command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+   - **Instance type**: Free
+5. En "Environment Variables", agrega `GEMINI_API_KEY` con tu key real
+6. Clic en "Create Web Service"
+
+Render te va a dar una URL pública, algo como `https://ziir-backend.onrender.com`.
+
+**Paso 3 — Conecta el frontend**
+En `index.html`, cambia:
+```js
+const BACKEND_URL = "http://localhost:8000";
+```
+por tu URL real de Render, por ejemplo:
+```js
+const BACKEND_URL = "https://ziir-backend.onrender.com";
+```
+
+**Aviso del plan gratis**: el servidor "duerme" tras ~15 min sin uso. La primera vez que Ziir lo reciba puede tardar 30-50 segundos en responder mientras despierta; después va normal.
 
 ## Siguiente paso
 
