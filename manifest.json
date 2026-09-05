@@ -1,0 +1,9 @@
+{
+  "name": "Ada",
+  "short_name": "Ada",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F3F2EE",
+  "theme_color": "#D8663F",
+  "icons": []
+}
