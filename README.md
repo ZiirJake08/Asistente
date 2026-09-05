@@ -1,4 +1,4 @@
-# Backend de Ada (tu asistente)
+# Backend de Ziir (tu asistente)
 
 ## 1. Correrlo en tu PC
 
